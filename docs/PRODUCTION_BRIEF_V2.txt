@@ -1,0 +1,1330 @@
+You are the lead product engineer, senior UX designer, security-conscious full-stack architect and pragmatic technical product manager for Swim Progress Plan.
+
+I want you to take the EXISTING Swim Progress Plan repository and turn it into a production-quality, deployable application.
+
+Do not blindly rebuild the existing prototype from scratch.
+
+FIRST:
+1. Inspect the entire current repository.
+2. Understand its existing architecture, components, UI system, data model, tests and current parent/instructor journeys.
+3. Preserve the strongest parts of the existing interface.
+4. Identify prototype-only architecture that must be replaced for production.
+5. Then create and execute a structured implementation plan.
+
+Do not merely give me recommendations. Implement the application.
+
+==================================================
+PRODUCT VISION
+==================================================
+
+Swim Progress Plan is an ongoing supplementary swimming coaching programme.
+
+Parents book coaching in six-week blocks, typically corresponding to approximately half a term.
+
+It operates ALONGSIDE a child's normal swimming lessons rather than replacing them.
+
+The fundamental problem we are solving is this:
+
+A parent may see that their child remains at Fair or Good, or stays in the same swimming stage for a long time, but not understand WHY.
+
+For example, a broad front-crawl kicking outcome may hide several distinct technical issues.
+
+Swim Progress Plan breaks technique into understandable components such as:
+
+- body alignment
+- head/body position
+- alternating flutter kick
+- kick generated from the hips
+- relaxed ankles
+- consistent kicking rhythm
+- arm action
+- hand entry
+- breathing timing
+- body position while breathing
+- arm/leg coordination
+- maintaining technique over distance
+
+The exact teaching framework must remain editable by authorised staff.
+
+This product does NOT award official Swim England stages.
+
+It provides supplementary coaching observations and development targets.
+
+==================================================
+THE SINGLE MOST IMPORTANT PRODUCT PRINCIPLE
+==================================================
+
+A parent should be able to open the app for 30–60 seconds after their child's lesson and immediately answer:
+
+1. What is my child doing well?
+2. What are they struggling with?
+3. Why are they struggling with it?
+4. What is the teacher working on next?
+5. Has this improved compared with previous weeks?
+
+If the parent has to interpret complex charts, navigate six screens, understand swimming terminology or calculate anything themselves, the UX has failed.
+
+DESIGN FOR NON-TECHNICAL, BUSY PARENTS FIRST.
+
+Progressive disclosure is essential.
+
+Show the simple answer first.
+Allow technical detail to be opened when wanted.
+
+==================================================
+ASSESSMENT SYSTEM
+==================================================
+
+Preserve these five statuses exactly:
+
+1. Not Assessed
+2. Needs Practice
+3. Fair
+4. Good
+5. Pass
+
+Do not rename these unless explicitly instructed by me.
+
+Each individual skill can have:
+
+- status
+- teacher observation
+- next development target
+- success criteria
+- assessment date
+- instructor
+- programme week
+- optional internal teacher note
+
+A skill's status must NOT automatically be interpreted as an official swimming-stage result.
+
+Display this distinction clearly but without repeatedly cluttering the parent's interface with defensive legal text.
+
+==================================================
+CORE USER TYPES
+==================================================
+
+Build proper authentication and role-based access for:
+
+PARENT
+INSTRUCTOR
+ADMIN
+
+Potential later role:
+VENUE / PARTNER MANAGER
+
+Do not build the partner-manager role unless it genuinely helps the current architecture. Design the data model so it could be added later.
+
+==================================================
+PARENT EXPERIENCE
+==================================================
+
+The parent experience is the most important UX in the product.
+
+Build a beautiful mobile-first parent application.
+
+HOME / DASHBOARD
+
+At the top show:
+
+- child's name
+- programme / current six-week block
+- current week
+- next coaching session
+- current coaching priority
+
+Then make the main content answer:
+
+WHAT IMPROVED
+
+Show 1–3 meaningful recent improvements in plain English.
+
+Example:
+"Kick generated from the hips moved from Fair to Good."
+
+NEEDS MORE PRACTICE
+
+Show no more than the most important current focus items.
+
+Each card should contain:
+
+Skill:
+Relaxed ankles
+
+Status:
+Fair
+
+Why:
+"Oliver's toes are pointing more often, but his ankles tighten when he concentrates on his arms."
+
+Next target:
+"Kick 5 metres on his front with loose ankles and pointed toes three times in a row."
+
+The parent should NOT need to click another page to understand these basics.
+
+Allow "View details" for the deeper technical view.
+
+==================================================
+SKILL DETAIL EXPERIENCE
+==================================================
+
+A parent should be able to open an individual skill and see:
+
+- simple skill title
+- short explanation of why it matters
+- current rating
+- what the rating means
+- instructor feedback
+- next target
+- success criteria
+- previous ratings
+- progress history
+- optional learning content / video area
+
+Avoid jargon.
+
+Where swimming terminology is required, explain it in parent-friendly language.
+
+Example:
+
+"Kick generated from the hips"
+
+Parent explanation:
+"The kick should begin from the hips rather than mainly bending at the knees. This creates a smoother and more efficient kick."
+
+==================================================
+TECHNIQUE BREAKDOWN
+==================================================
+
+This is a CENTRAL product feature.
+
+Do not present "Front crawl" as one single progress score.
+
+Break it into understandable areas such as:
+
+BODY POSITION
+KICKING
+ARMS
+BREATHING
+COORDINATION
+
+Within each category show its individual skills.
+
+Example:
+
+KICKING
+
+Alternating flutter kick        PASS
+Kick generated from hips        GOOD
+Relaxed ankles                  FAIR
+Consistent kicking rhythm       PASS
+
+Current focus:
+Relaxed ankles
+
+Parents should immediately understand:
+
+"My child's kick isn't simply good or bad. Three parts are strong and this particular part still needs work."
+
+==================================================
+PROGRESS OVER TIME
+==================================================
+
+Provide an excellent "Journey" screen.
+
+Parents should be able to compare:
+
+Week 1 baseline
+vs
+current week
+
+Show:
+
+- skills that improved
+- skills that reached Pass
+- skills unchanged
+- current outstanding priorities
+
+Allow a skill-by-skill comparison.
+
+Do NOT gamify this excessively.
+
+Do not imply that children should improve every week.
+
+Never make a child appear to have "failed".
+
+Avoid competitive leaderboards.
+
+==================================================
+SIX-WEEK BLOCKS
+==================================================
+
+The SERVICE is ongoing.
+
+The BOOKING UNIT is a six-week block.
+
+A family may purchase another six-week block after completing the current one.
+
+Model:
+
+Programme
+  -> Block
+      -> Week/session 1
+      -> Week/session 2
+      -> Week/session 3
+      -> Week/session 4
+      -> Week/session 5
+      -> Week/session 6
+      -> Block review
+
+At the end of week six:
+
+- summarise where the swimmer started
+- show improvements
+- show current priorities
+- include teacher recommendation
+- allow another block to be booked when available
+
+Do NOT describe the whole business as a six-week programme that permanently ends.
+
+==================================================
+INITIAL ASSESSMENT
+==================================================
+
+Support a baseline assessment when a swimmer starts.
+
+Instructor chooses:
+
+- relevant skill set
+- baseline ratings
+- priorities
+- coaching goals
+
+The programme should NOT necessarily make every child work on every possible skill.
+
+Allow instructors to select the most relevant development targets for that swimmer.
+
+==================================================
+INSTRUCTOR EXPERIENCE
+==================================================
+
+The instructor interface must be EXTREMELY FAST.
+
+A teacher may be updating several swimmers immediately after being poolside.
+
+Design for:
+
+- wet hands
+- phone/tablet use
+- limited time
+- minimal typing
+- few taps
+
+Instructor dashboard:
+
+TODAY'S SESSIONS
+UPCOMING
+NEEDS UPDATING
+RECENTLY COMPLETED
+
+Assessment workflow:
+
+Choose session
+→ choose swimmer
+→ show selected programme skills
+→ tap one of five ratings
+→ optionally add short feedback
+→ optionally add next target
+→ save
+
+Prefer one-screen assessment where possible.
+
+Keep the five status controls large and obvious.
+
+Add autosaving of local draft state so accidental navigation does not lose work.
+
+Do NOT silently save a completed assessment to the server.
+
+Make final Save / Publish explicit.
+
+After publishing:
+
+- parent view updates
+- progress history records the change
+- relevant notification is created
+
+Maintain an immutable or auditable history of assessments.
+
+==================================================
+INSTRUCTOR NOTES
+==================================================
+
+Separate:
+
+PARENT-VISIBLE FEEDBACK
+
+from:
+
+INTERNAL TEACHER NOTES
+
+Never accidentally expose internal notes to parents.
+
+Make that distinction visually obvious.
+
+==================================================
+ADMIN EXPERIENCE
+==================================================
+
+Build an admin area for authorised users to manage:
+
+- instructors
+- parents
+- swimmers
+- venues
+- groups
+- six-week blocks
+- sessions
+- bookings
+- skill framework
+- assessment criteria
+- programme templates
+- availability
+- prices
+- notifications
+- safeguarding/consent status
+
+Admin should be powerful but not overcomplicated.
+
+==================================================
+BOOKINGS
+==================================================
+
+Build a proper booking architecture.
+
+Parents should be able to:
+
+- see available programmes / blocks
+- select child
+- choose available format
+- book
+- pay
+- see booking confirmation
+- see future sessions
+- manage bookings according to programme rules
+
+Formats should support:
+
+ONE TO ONE
+
+and
+
+SMALL GROUP
+
+Group capacity must be configurable.
+
+Do NOT hardcode four forever.
+
+==================================================
+PAYMENTS
+==================================================
+
+Use Stripe unless there is a very strong technical reason not to.
+
+Use Stripe Checkout and/or appropriate Stripe-hosted components.
+
+Do NOT build custom card storage.
+
+Never store card numbers.
+
+Support:
+
+- six-week block payment
+- payment status
+- refunds through authorised admin workflow
+- receipts
+- Stripe webhook verification
+- payment reconciliation
+
+Keep commercial values configurable.
+
+Do not hardcode the previously discussed hypothetical prices.
+
+==================================================
+AUTHENTICATION
+==================================================
+
+Replace all simulated authentication.
+
+Implement secure production authentication.
+
+Strong preferred architecture:
+
+Supabase Auth + PostgreSQL
+
+unless inspection of the existing application reveals a better maintainable alternative.
+
+Support:
+
+- email/password or magic-link authentication
+- password reset
+- secure sessions
+- email verification
+- logout
+- role-based routes
+- account disabling
+
+Do not implement insecure client-side role checks as the only protection.
+
+==================================================
+DATABASE
+==================================================
+
+Use PostgreSQL.
+
+Design a proper relational schema.
+
+Likely entities include:
+
+users
+profiles
+parents
+instructors
+admins
+swimmers
+parent_swimmers
+venues
+programmes
+programme_blocks
+sessions
+session_enrolments
+skill_categories
+skills
+skill_success_criteria
+swimmer_programme_skills
+assessments
+assessment_history
+teacher_feedback
+internal_notes
+development_targets
+notifications
+bookings
+payments
+consents
+medical_flags / support information only where genuinely necessary
+audit_logs
+
+Do not blindly use those exact tables if a cleaner model exists.
+
+Design the schema first.
+
+Use migrations.
+
+Do not rely on localStorage for production records.
+
+==================================================
+AUTHORISATION AND CHILD DATA
+==================================================
+
+Security around child data is NON-NEGOTIABLE.
+
+A parent may access ONLY:
+
+- their own account
+- their own linked child/children
+- assessments intended for them
+- bookings/payments associated with them
+
+An instructor may access ONLY swimmers/classes/programmes they are authorised to teach.
+
+Admins have scoped administrative access.
+
+Use database-level protection where possible.
+
+If using Supabase, use properly tested Row Level Security policies.
+
+Do not rely solely on hidden UI routes.
+
+==================================================
+UK DATA PROTECTION
+==================================================
+
+Design for UK GDPR principles.
+
+We will separately obtain legal/data-protection advice, so do NOT claim that the application is legally compliant simply because features exist.
+
+Engineering requirements:
+
+- collect the minimum child data necessary
+- clear privacy controls
+- parental responsibility / consent recording where required
+- retention fields
+- deletion workflow
+- account export / subject access support architecture
+- audit access where appropriate
+- secure backups
+- encrypted transport
+- secure secrets
+- no sensitive information in analytics logs
+- no child names in error-reporting payloads where avoidable
+
+Avoid free-text medical information unless absolutely necessary.
+
+If health/support information is required for safe teaching, design it as restricted-access structured information.
+
+==================================================
+SAFEGUARDING
+==================================================
+
+Do NOT build parent-to-instructor private chat in the first production release.
+
+Feedback should be structured around sessions and assessments.
+
+If communication is required, prefer controlled programme communication or email workflows.
+
+Do not add social features.
+
+Do not expose children's information publicly.
+
+==================================================
+NOTIFICATIONS
+==================================================
+
+Parent notifications may include:
+
+- assessment published
+- next target added
+- new Pass achievement
+- session reminder
+- block nearing completion
+- next block available
+
+Build an in-app notification centre.
+
+Design email notifications as an optional integration.
+
+Never expose sensitive child assessment content in an email subject line.
+
+==================================================
+ACHIEVEMENTS
+==================================================
+
+Pass achievements may be celebrated, but keep the tone professional.
+
+Example:
+
+"New skill achieved
+Oliver has reached Pass for Consistent kicking rhythm."
+
+Always make clear that an individual skill Pass is not an official swimming-stage award.
+
+==================================================
+LEARNING CONTENT / VIDEOS
+==================================================
+
+Create architecture for future instructional videos.
+
+For each skill allow:
+
+- explanation
+- teacher cues
+- common mistakes
+- video URL
+- thumbnail
+- supervision / safety message
+
+Do NOT invent or generate all swimming instruction content.
+
+Use clean placeholders where content has not yet been approved.
+
+==================================================
+VENUE / PROVIDER ARCHITECTURE
+==================================================
+
+Do NOT hardcode Lampton throughout the production application.
+
+This business could eventually operate in several pools or partners.
+
+Create:
+
+venue
+provider / organisation
+programme
+
+as configurable concepts.
+
+Brand the product itself as:
+
+SWIM PROGRESS PLAN
+
+A future venue can be associated with a programme without owning the underlying application.
+
+Do not build full multi-tenant SaaS complexity prematurely.
+
+Keep the architecture extensible.
+
+==================================================
+PUBLIC WEBSITE
+==================================================
+
+Build a polished public-facing website separate from the logged-in application.
+
+Pages:
+
+HOME
+HOW IT WORKS
+FOR PARENTS
+PROGRAMMES
+ABOUT / COACHING APPROACH
+FAQ
+CONTACT
+SIGN IN
+
+Eventually:
+BOOK
+
+Home page should explain the concept in seconds.
+
+Suggested messaging:
+
+"See what your child is improving.
+Understand what still needs work.
+Know what comes next."
+
+Explain:
+
+Focused supplementary coaching
++
+clear progress feedback
+
+Avoid attacking or criticising existing swim schools.
+
+Position it as complementary.
+
+==================================================
+PARENT ONBOARDING
+==================================================
+
+Make onboarding extremely simple.
+
+Parent:
+1. creates account
+2. adds or links child
+3. enters only required details
+4. completes consent / safety information
+5. books programme
+6. sees upcoming coaching block
+
+Avoid massive forms.
+
+Use multi-step onboarding with progress indication.
+
+Allow the parent to save and continue later.
+
+==================================================
+DESIGN LANGUAGE
+==================================================
+
+Preserve the strongest visual direction of the existing prototype:
+
+- dark navy
+- teal accent
+- light neutral backgrounds
+- rounded cards
+- restrained borders
+- strong typography
+- generous spacing
+- readable status chips
+
+But improve consistency substantially.
+
+The product should feel:
+
+CALM
+PREMIUM
+TRUSTWORTHY
+SIMPLE
+MODERN
+CHILD-APPROPRIATE WITHOUT LOOKING CHILDISH
+
+Do NOT make it look like:
+
+- a school management system
+- a spreadsheet
+- a children's cartoon app
+- a crypto dashboard
+- a generic Bootstrap admin template
+
+Use visual hierarchy aggressively.
+
+Parents should never face walls of information.
+
+==================================================
+MOBILE FIRST
+==================================================
+
+Parent interface must be outstanding from approximately 360px upwards.
+
+Primary target:
+mobile browser / installable PWA.
+
+Also support:
+tablet
+desktop
+
+Instructor interface must be excellent on phone and tablet.
+
+Admin may be desktop-oriented but must remain responsive.
+
+==================================================
+PWA
+==================================================
+
+Make the application installable as a Progressive Web App where practical.
+
+Include:
+
+- manifest
+- icons
+- suitable theme metadata
+- responsive layouts
+
+Be conservative with offline child data.
+
+Do NOT cache sensitive child records unnecessarily.
+
+==================================================
+ACCESSIBILITY
+==================================================
+
+Target WCAG 2.2 AA quality.
+
+Requirements include:
+
+- semantic HTML
+- proper heading hierarchy
+- keyboard navigation
+- visible focus states
+- screen-reader labels
+- sufficient contrast
+- large tap targets
+- status never communicated by colour alone
+- accessible forms
+- meaningful error messages
+- reduced-motion support where appropriate
+
+Run automated accessibility testing.
+
+==================================================
+UX RULES
+==================================================
+
+1. Never show a parent more information than needed on the first screen.
+
+2. Prefer:
+"What improved"
+"What needs practice"
+"Next target"
+
+over abstract analytics.
+
+3. Charts supplement explanations.
+Charts must never replace plain-English explanations.
+
+4. Never imply:
+"Your child is 34% good at swimming."
+
+If percentages are used, precisely explain what the denominator represents.
+
+5. Avoid negative labels such as:
+Failed
+Bad
+Poor swimmer
+
+6. "Not Assessed" means not assessed, NOT zero ability.
+
+7. Provide empty states that explain what will happen next.
+
+8. Never make parents guess whether data has been saved.
+
+9. Avoid modals unless they genuinely improve the workflow.
+
+10. Use one obvious primary action per view.
+
+==================================================
+ERROR HANDLING
+==================================================
+
+Build proper:
+
+- loading states
+- empty states
+- validation states
+- permission errors
+- offline/network errors
+- 404
+- 500/general error boundary
+
+Error messages must explain what the user can do next.
+
+==================================================
+TECHNICAL QUALITY
+==================================================
+
+Use TypeScript in strict mode.
+
+Prefer a clean architecture over excessive abstraction.
+
+Requirements:
+
+- reusable UI components
+- feature-oriented organisation where useful
+- schema validation, e.g. Zod
+- server-side validation for sensitive operations
+- sanitisation as appropriate
+- secure environment variables
+- no credentials in source
+- database migrations
+- seed/demo environment
+- linting
+- formatting
+- unit tests
+- integration tests
+- end-to-end tests
+- accessibility tests
+
+Avoid enormous components.
+
+Avoid `any` unless justified.
+
+Remove dead prototype code rather than leaving parallel systems.
+
+==================================================
+DEMO MODE
+==================================================
+
+Retain a clearly separated demo environment.
+
+Demo environment:
+
+- fictional users
+- fictional swimmers
+- no live payments
+- obvious "Demonstration only" notice
+- safe reset
+- no real child data
+
+Production environment must never seed fictional records into real customers accidentally.
+
+==================================================
+ANALYTICS
+==================================================
+
+Use privacy-conscious analytics only if appropriate.
+
+Useful product events:
+
+- parent viewed latest feedback
+- parent opened next target
+- booking funnel steps
+- instructor assessment completion time
+- block completion
+- rebooking
+
+Never send child names, assessment text or sensitive data to analytics providers.
+
+==================================================
+AUDITABILITY
+==================================================
+
+For important assessment actions record:
+
+- who changed it
+- when
+- previous value
+- new value
+
+Do not allow silent historical rewriting of assessments.
+
+If something is corrected later, maintain an audit trail.
+
+==================================================
+DEPLOYMENT
+==================================================
+
+The project must be genuinely deployable.
+
+Preferred deployment model if compatible:
+
+Frontend/app:
+Vercel
+
+Database/auth/storage:
+Supabase / managed PostgreSQL
+
+Payments:
+Stripe
+
+Transactional email:
+Resend or similarly reputable provider
+
+Error monitoring:
+Sentry configured with sensitive-data filtering
+
+Do not force these providers if the current codebase strongly supports a better architecture.
+
+Provide:
+
+- `.env.example`
+- migration instructions
+- production build command
+- deployment documentation
+- domain setup notes
+- webhook setup instructions
+- secure environment variable list
+- backup notes
+- rollback guidance
+
+Never commit real secrets.
+
+==================================================
+CI / QUALITY GATES
+==================================================
+
+Create GitHub Actions or equivalent CI that runs:
+
+1. install
+2. lint
+3. typecheck
+4. unit tests
+5. integration tests where appropriate
+6. production build
+7. accessibility / browser smoke checks where practical
+
+A failed test must fail CI.
+
+==================================================
+TEST THESE CRITICAL JOURNEYS
+==================================================
+
+PARENT
+
+1.
+Sign up
+→ verify/login
+→ link/add child
+→ complete required information
+→ view dashboard
+
+2.
+Open current focus
+→ understand rating
+→ read instructor feedback
+→ see next target
+→ view previous assessment
+
+3.
+View Journey
+→ compare baseline to current position
+
+4.
+See available block
+→ book
+→ Stripe test payment
+→ booking confirmation
+→ sessions appear
+
+INSTRUCTOR
+
+5.
+Login
+→ see today's group
+→ open swimmer
+→ update skill statuses
+→ add parent feedback
+→ add next target
+→ publish
+→ parent receives updated record
+
+6.
+Accidentally navigate away during assessment
+→ draft remains available
+→ no completed assessment is accidentally published
+
+ADMIN
+
+7.
+Create programme/block
+→ create sessions
+→ set capacity
+→ assign instructor
+→ make places available
+
+8.
+Manage booking
+→ payment status visible
+→ capacity correct
+
+SECURITY
+
+9.
+Parent A tries to access Parent B's child through direct URL/API request
+→ access denied
+
+10.
+Instructor tries to access unrelated programme
+→ access denied
+
+11.
+Disabled user session
+→ access denied
+
+==================================================
+IMPORTANT PRODUCT COPY
+==================================================
+
+Use British English.
+
+Prefer simple language.
+
+Parent-facing examples:
+
+Instead of:
+"Technical deficiency detected in plantar flexion."
+
+Use:
+"His ankles tighten when he focuses on his arms."
+
+Instead of:
+"Objective incomplete."
+
+Use:
+"Next target"
+
+Instead of:
+"Failed assessment"
+
+Use:
+"Needs Practice"
+
+==================================================
+DO NOT DO THESE THINGS
+==================================================
+
+Do not:
+
+- copy Lampton branding
+- imply Lampton endorses the application
+- scrape or import Lampton customer information
+- create official Swim England stage awards
+- make medical claims
+- promise children will progress faster
+- promise stage advancement
+- create AI-generated coaching advice for real children
+- add an AI chatbot merely because it sounds impressive
+- add parent/teacher social messaging
+- add leaderboards
+- add excessive gamification
+- expose children's data publicly
+- use fake production functionality
+- label incomplete functionality as finished
+- put real credentials in the repository
+- hide failing tests
+- silently remove important existing functionality
+
+==================================================
+CURRENT PROTOTYPE LIMITATIONS TO REPLACE
+==================================================
+
+The existing prototype currently contains demonstration functionality rather than production systems.
+
+Known missing production capabilities include:
+
+- real authentication
+- real database
+- booking
+- payment
+- secure live child-data handling
+- production notifications
+- provider integrations
+
+The current screenshot audit specifically identifies real sign-in, booking, payment and external communications as absent from the prototype. Treat those as genuine implementation work, not existing functionality. 
+
+Preserve the concepts already demonstrated well:
+
+- parent dashboard
+- skill-by-skill breakdown
+- five assessment states
+- current focus
+- instructor feedback
+- next development target
+- assessment history
+- progress journey
+- instructor assessment workflow
+
+==================================================
+FIRST RELEASE SCOPE
+==================================================
+
+The first production release should be capable of supporting:
+
+- one real provider/operation
+- multiple venues
+- multiple instructors
+- real parents
+- real swimmers
+- 1:1 sessions
+- small groups
+- six-week paid blocks
+- secure assessments
+- feedback
+- progress history
+- rebooking
+
+It should NOT attempt to become a giant leisure-centre management platform.
+
+==================================================
+DELIVERY PROCESS
+==================================================
+
+WORK IN PHASES.
+
+PHASE 0
+Audit existing project.
+
+Produce:
+- current architecture summary
+- reusable components
+- prototype-only systems to replace
+- security gaps
+- migration plan
+- final recommended production architecture
+
+Then continue implementation unless there is a genuinely blocking decision requiring my input.
+
+PHASE 1
+Foundation:
+- architecture
+- database
+- auth
+- roles
+- design system
+- route structure
+
+PHASE 2
+Core coaching:
+- swimmers
+- programme blocks
+- skills
+- assessments
+- feedback
+- next targets
+- journey
+
+PHASE 3
+Instructor:
+- sessions
+- assessment workflow
+- notes
+- draft preservation
+- publishing
+
+PHASE 4
+Parent experience:
+- polished dashboard
+- skill detail
+- journey
+- notifications
+- mobile UX
+
+PHASE 5
+Commercial:
+- availability
+- bookings
+- Stripe
+- block purchases
+- receipts
+
+PHASE 6
+Admin:
+- programme management
+- venues
+- instructors
+- bookings
+- skill framework
+
+PHASE 7
+Production hardening:
+- RLS/security testing
+- accessibility
+- error handling
+- audit log
+- performance
+- privacy safeguards
+- backups
+- monitoring
+
+PHASE 8
+Deployment:
+- staging
+- production
+- deployment docs
+- final QA
+
+==================================================
+BEFORE DECLARING THE PROJECT COMPLETE
+==================================================
+
+You must:
+
+- run all tests
+- run production build
+- resolve TypeScript errors
+- run accessibility checks
+- check desktop/tablet/mobile
+- test authentication
+- test authorisation
+- test parent isolation
+- test Stripe test-mode workflow
+- test assessment publishing
+- test rebooking flow
+- test empty states
+- test network failures
+- test refresh/deep links
+- check console for errors
+- inspect bundle/performance issues
+- document anything deliberately left incomplete
+
+Do not tell me something works unless you actually tested it.
+
+==================================================
+FINAL DELIVERABLE
+==================================================
+
+I want a genuine production-quality Swim Progress Plan application, not an expanded mock-up.
+
+When finished, give me:
+
+1. architecture summary
+2. database/schema summary
+3. user-role/security model
+4. implemented feature list
+5. screenshots of core desktop and mobile journeys
+6. test results
+7. accessibility results
+8. deployment instructions
+9. environment variables required
+10. known limitations
+11. recommended next priorities
+
+Most importantly:
+
+MAKE THE PARENT EXPERIENCE EXCEPTIONALLY SIMPLE.
+
+A parent should open the application and immediately understand:
+
+WHAT IMPROVED
+WHAT NEEDS PRACTICE
+WHY
+WHAT COMES NEXT
+
+Everything else exists to support that.

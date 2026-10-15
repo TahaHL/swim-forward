@@ -1,0 +1,131 @@
+SWIM PROGRESS PLAN: BUILD THE PRODUCTION SERVICE
+
+ROLE
+You are a senior full-stack engineer building a real, production web service that will hold children's information. Security, privacy and reliability matter more than speed. Verify everything you claim. Ask before anything irreversible, public or costly.
+
+1. WHAT THIS IS
+- Owner: Taha, a qualified Level 2 swimming teacher in West London (sole trader).
+- Swim Progress Plan is supplementary swimming coaching that runs alongside a child's regular lessons. Small groups (up to four, 30-minute sessions) or 1:1, usually as a six-week development programme.
+- The app lets the coach record technique assessments quickly at the poolside and lets parents see, for their own child only:
+  - how the last session went
+  - what improved
+  - what needs work and why
+  - the one next coaching focus
+  - the next session
+- Separate technique ratings sit alongside, and never replace, any provider's stage outcomes.
+- Version 1 serves the owner's own coaching. Design the data model so more coaches or a second business could be added later, but do not build multi-business features now.
+- Tagline: "Every Skill. Every Milestone. Every Step Forward."
+
+2. EXISTING CODE TO BUILD FROM
+- Redesign app (start here):
+  - outputs/swim-progress (also swim-progress-source.zip).
+  - Read swim-progress-handover.txt and README.md first.
+  - React/TypeScript, simplified parent views (Home, Progress, Profile).
+  - Instructor flows for swimmers, sessions, assessment publishing, invitations and deletion.
+  - Server-side ownership checks.
+  - Currently on the Sites Vinext runtime, Cloudflare D1 and the previous sign-in provider. Never deployed.
+- Original demo (reference for content and tone): github.com/TahaHL/swim-progress-plan
+  - 17 front-crawl skills with criteria, feedback examples, a "Then and now" comparison, achievements, and a five-label key with provisional wording.
+  - Reuse its skill content and IDs. Do not modify that repo.
+- If you cannot access either source, stop and tell me what you need.
+
+3. ASSESSMENT RULES (do not change)
+- Five labels in fixed order: Not Assessed, Needs Practice, Fair, Good, Pass.
+- Only Pass completes a skill. Good never counts as Pass.
+- Not Assessed means no current assessment and is excluded from figures.
+- Every assessment is kept in history. A downgrade or reset changes the current state but deletes nothing.
+- A Pass is for one skill and is never described as a stage award.
+- No numeric scores, averages, percentages-as-grades or predictions.
+- Label descriptions stay marked provisional until I confirm them in the app.
+
+4. PLATFORM (migrate away from the previous sign-in provider and Sites)
+- Front end: React + TypeScript (keep the existing UI where sensible), installable as a PWA.
+- Back end and database: Supabase in a UK or EU region:
+  - Postgres.
+  - Auth with email one-time codes or magic links (no passwords for parents).
+  - Row-level security on every table.
+- Hosting: Vercel or Netlify, with separate staging and production projects.
+- Transactional email: Resend or Postmark.
+- Error monitoring with personal data scrubbed.
+- Before choosing, verify current regions, data processing terms and free-tier limits. Tell me the expected monthly cost for 1 coach and about 50 families.
+- If you recommend a different stack, explain why in five lines and wait for my answer.
+
+5. VERSION 1 SCOPE
+Roles: owner (coach), parent. Design for an additional coach role later.
+
+Coach:
+- Create swimmers with minimal data: first name, last name, year of birth, current lesson stage (free text), and up to two parent emails.
+- Groups, six-week programmes and a session schedule with venue, plus attendance marking.
+- A fast poolside assessment sheet:
+  - five buttons per skill
+  - optional feedback and next target per skill
+  - one session note and one next coaching focus
+  - a single "Publish update" action
+  - drafts kept safely until published
+  - works on a phone in wet hands: large targets, minimal typing
+- A skill library editor to add, edit and retire skills and criteria per stroke.
+  - Front crawl ships with the 17 existing skills.
+  - Other strokes stay hidden until I add and approve their criteria.
+- Invite parents by email: single-use links that expire after 7 days, with revocable access.
+- Preview exactly what a parent will see.
+- Export or permanently delete a swimmer's records.
+- Audit log of every assessment change: who, when, old and new value.
+
+Parent:
+- Sign in with an emailed code.
+- First sign-in captures consent to data use, with the privacy notice linked and a version recorded.
+- Home: how it went, what improved, what needs work and why, one next focus, next session. No large percentage figure.
+- Progress:
+  - per-skill checklist
+  - skill detail with rating, feedback, next target and history
+  - a "Then and now" comparison between any two weeks
+- Achievements: one per skill reaching Pass.
+- Email alert "You have a new update from your coach". The email contains no assessment content, only a sign-in link.
+- Download their child's records. Request deletion.
+- Read-only: parents can never change assessments and only ever see their own child.
+
+5b. NOT IN VERSION 1
+- Payments, booking checkout, chat or messaging.
+- AI features or stage predictions.
+- Medical or health information.
+- Photos or videos of children.
+- Native app-store apps.
+- Leave a clean extension point for coach-filmed demonstration videos per skill (adult demonstrators only) in version 1.1.
+
+6. SECURITY AND PRIVACY BY DESIGN
+- Row-level security tests that prove:
+  - a parent cannot read another child's data
+  - a parent cannot write anything
+  - a coach can only reach their own swimmers
+- Secrets only in environment variables. Nothing sensitive in logs, URLs, analytics or error reports.
+- Rate limiting on sign-in and invitations. Origin and input validation on every write.
+- Retention: a configurable period after a programme ends, with automatic deletion and a dry-run report first.
+- Daily backups, plus a tested restore procedure written up in RUNBOOK.md.
+- Privacy notice, terms and consent wording as clearly marked TEMPLATES for my solicitor to review. Do not present them as final or legally checked.
+- Accessibility to WCAG 2.2 AA: keyboard, focus, contrast, labels and 390 px mobile, with an automated scan in CI.
+
+7. MILESTONES (stop at the end of each, report and wait for my go-ahead)
+M0 Audit and repo
+- Clean install of the redesign. Run the typecheck, tests, the 39-check access suite and the build. Report real results.
+- Create a clean git repository with no secrets. Ask before creating the private GitHub repo or pushing.
+M1 Platform migration
+- Supabase schema and RLS ported from the D1 schema; email sign-in; staging deploy with clearly fictional seed data; CI running tests on every push.
+M2 Core flows
+- Everything in section 5 working end to end on staging, with automated end-to-end tests for both roles.
+M3 Hardening
+- Security review against the OWASP Top 10, an accessibility audit, a backup-and-restore drill, monitoring and RUNBOOK.md.
+M4 Launch readiness
+- Empty production environment. LAUNCH_CHECKLIST.md marking each item as done, owner action or legal advice.
+- Do not invite any real parent. I will do that myself once my launch gates are met.
+
+8. LAUNCH GATES (my responsibility; list them in LAUNCH_CHECKLIST.md, do not attempt them)
+- Written employer consent for outside business.
+- Legal advice on the IP and restrictive clauses in my employment contract.
+- ICO data protection fee check.
+- Data protection impact assessment.
+- Privacy notice and terms reviewed by a solicitor.
+- Insurance, safeguarding policy, venue agreement.
+- My approved teaching criteria and label descriptions.
+
+9. WORKING RULES
+- Never
